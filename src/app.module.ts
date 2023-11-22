@@ -1,12 +1,19 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AnimalModule } from './animal/animal.module';
 import { AppController } from './app.controller';
-// import { AppService } from './app.service';
 import { GlobalCacheModule } from './configs/cache.config';
+import redisConfig from './configs/redis.config';
 
 @Module({
-  imports: [GlobalCacheModule, AnimalModule],
+  imports: [
+    GlobalCacheModule,
+    AnimalModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [redisConfig],
+    }),
+  ],
   controllers: [AppController],
-  // providers: [AppService],
 })
 export class AppModule {}
