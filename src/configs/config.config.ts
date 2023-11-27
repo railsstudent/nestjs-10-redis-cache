@@ -2,7 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import Joi from 'joi';
 import redisConfig from './redis.config';
 
-export const GlobalConfigModule = ConfigModule.forRoot({
+export const globalConfigConfig = ConfigModule.forRoot({
   isGlobal: true,
   load: [redisConfig],
   validationSchema: Joi.object({
