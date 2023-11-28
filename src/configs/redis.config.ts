@@ -1,7 +1,10 @@
-import { registerAs } from '@nestjs/config';
+import { RedisModule } from '@songkeys/nestjs-redis';
+import { env } from './env.config';
 
-export default registerAs('redis', () => ({
-  host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT, 10) || 6379,
-  ttl: parseInt(process.env.REDIS_TTL, 10) || 60000,
-}));
+export const redisConfig = RedisModule.forRoot({
+  closeClient: true,
+  config: {
+    host: env.REDIS.HOST,
+    port: env.REDIS.PORT,
+  },
+});

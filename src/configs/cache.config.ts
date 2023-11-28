@@ -1,27 +1,13 @@
 import { CacheModule } from '@nestjs/cache-manager';
-import { ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-ioredis-yet';
-import { RedisClientOptions } from 'redis';
-
-interface RedisConfig {
-  host: string;
-  port: number;
-  ttl: number;
-}
+import { RedisOptions } from 'ioredis';
+import { env } from './env.config';
 
 // https://github.com/dabroek/node-cache-manager-redis-store/issues/40
-export const globalCacheConfig = CacheModule.registerAsync<RedisClientOptions>({
-  useFactory: (configService: ConfigService) => {
-    const { host, port, ttl } = configService.get<RedisConfig>('redis');
-    return {
-      store: redisStore,
-      socket: {
-        host,
-        port,
-      },
-      ttl,
-    };
-  },
-  inject: [ConfigService],
+export const globalCacheConfig = CacheModule.register<RedisOptions>({
+  store: redisStore,
+  host: env.REDIS.HOST,
+  port: env.REDIS.PORT,
+  ttl: env.REDIS.TTL,
   isGlobal: true,
 });
